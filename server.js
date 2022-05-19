@@ -15,19 +15,29 @@ app.get('/', (request, response) => {
 });
 
 
-app.get('/weather', (request, response) => {
-    const city = request.query.city;
-    console.log(city);
-    const cityWeather = new List(city)
-    response.send('this is still a test');
+app.get('/weather', (request, response, next) => {
+    try {
+        const city = request.query.city;
+        // console.log(city);
+        const cityWeather = new Forecast(city)
+        // console.log(cityWeather)
+        response.status(200).send(cityWeather);
+    } catch (error) {
+        error.customMessage = 'something happened in the api';
+        next(error);
+    }
 });
 
 
-class List {
+class Forecast {
     static weatherData = require('./data.json');
     constructor(city) {
-        this.items = List.weatherData.data.cityName.find(obj => obj === city).data;
+        this.city = Forecast.weatherData.find(obj => obj.city_name.toLowerCase() === city.toLowerCase());
+        this.cityArr = this.city.data.map(obj => ({ 'date': obj.datetime, 'description': obj.weather.description }))
     }
 }
+app.use((error, request, response, next) => {
+    response.status(500).send(`something went wrong ${error.customMessage}`);
+})
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
