@@ -35,7 +35,7 @@ app.get('/weather', async (request, response, next) => {
 });
 
 
-app.get('/movies', async (request, response, next) => {
+app.get('/movie', async (request, response, next) => {
   try {
     const search = request.query.search;
     console.log('is this working???', search);
