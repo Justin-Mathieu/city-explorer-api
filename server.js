@@ -40,8 +40,10 @@ app.get('/movie', async (request, response, next) => {
     const search = request.query.searchQuery;
     console.log('is this working???', search);
 
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${search}`; console.log(url);
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${search}`;
+    console.log(url);
     const movieResults = await axios.get(url);
+    console.log('movie creation...');
     const packagedMovieResults = (movieResults.data.results.map(movie => new Movie(movie)));
     console.log(movieResults.data.results[0]);
     response.status(200).send(packagedMovieResults);
@@ -53,22 +55,22 @@ app.get('/movie', async (request, response, next) => {
 
 class Forecast {
   constructor(forecast) {
-    this.low = forecast.low_temp,
-      this.description = forecast.weather.description,
-      this.high = forecast.max_temp,
-      this.date = forecast.valid_date;
+    this.low = forecast.low_temp;
+    this.description = forecast.weather.description;
+    this.high = forecast.max_temp;
+    this.date = forecast.valid_date;
 
   }
 }
 
 class Movie {
   constructor(movie) {
-    this.title = movie.title,
-      this.overview = movie.overview,
-      this.avgVotes = movie.vote_average,
-      this.image = movie.poster_path,
-      this.pop = movie.popularity,
-      this.release = movie.release_date;
+    this.title = movie.title;
+    this.overview = movie.overview;
+    this.avgVotes = movie.vote_average;
+    this.image = movie.poster_path;
+    this.pop = movie.popularity;
+    this.release = movie.release_date;
 
   }
 }
