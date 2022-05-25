@@ -39,7 +39,8 @@ app.get('/movie', async (request, response, next) => {
   try {
     const search = request.query.searchQuery;
     console.log('is this working???', search);
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${search}`;
+
+    const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${search}`; console.log(url);
     const movieResults = await axios.get(url);
     const packagedMovieResults = (movieResults.data.results.map(movie => new Movie(movie)));
     console.log(movieResults.data.results[0]);
