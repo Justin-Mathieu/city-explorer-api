@@ -39,7 +39,7 @@ app.get('/movie', async (request, response, next) => {
   try {
     const search = request.query.searchQuery;
     console.log('is this working???', search);
-
+    console.log(process.env.MOVIE_API_KEY);
     const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${search}`;
     console.log(url);
     const movieResults = await axios.get(url);
@@ -49,6 +49,7 @@ app.get('/movie', async (request, response, next) => {
     response.status(200).send(packagedMovieResults);
   } catch (error) {
     error.customMessage = 'something happened in the movie api';
+    console.error(error);
     next(error);
   }
 });
