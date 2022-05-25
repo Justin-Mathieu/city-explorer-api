@@ -34,7 +34,7 @@ app.get('/weather', async (request, response, next) => {
   }
 });
 
-
+/// need to rebuild
 app.get('/movie', async (request, response, next) => {
   try {
     const search = request.query.searchQuery;
