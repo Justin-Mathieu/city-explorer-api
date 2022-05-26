@@ -1,26 +1,36 @@
 'use strict';
 
 const axios = require('axios');
+let cache = require('./Cache.js');
 
-
-function getWeather(request, response) {
-  const locationLat = request.query.lat;
-  const locationLon = request.query.lon;
-  console.log(locationLat, locationLon);
+function getWeather(locationLat, locationLon) {
+  const key = 'weather-' + locationLat + locationLon;
   const url = `${process.env.WEATHER_URL}?lat=${locationLat}&lon=${locationLon}&key=${process.env.WEATHER_API_KEY}&days=3`;
-  axios
-    .get(url)
-    .then(weatherResults => {
-      const packagedResults = weatherResults.data.data.map(forecast => new Forecast(forecast));
-      response.status(200).send(packagedResults);
-    })
 
-    .catch(error => {
-      error.customMessage = 'something happened in the weather api';
-      console.error('axios error', error);
-      response.status(500).send(`server error ${error}`);
-    });
+  if (cache[key] && (Date.now() - cache[key].timestamp < 50000)) {
+    console.log('Cache hit');
+  } else {
+    console.log('Cache miss');
+    cache[key] = {};
+    cache[key].timestamp = Date.now();
+    cache[key].data = axios.get(url)
+      .then(response => parseWeather(response.data));
+  }
+
+  return cache[key].data;
 }
+
+function parseWeather(weatherData) {
+  try {
+    const weatherSummaries = weatherData.data.map(day => {
+      return new Forecast(day);
+    });
+    return Promise.resolve(weatherSummaries);
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
 
 class Forecast {
   constructor(forecast) {
@@ -28,6 +38,7 @@ class Forecast {
     this.description = forecast.weather.description;
     this.high = forecast.max_temp;
     this.date = forecast.valid_date;
+    this.time = forecast.datetime;
 
   }
 }
