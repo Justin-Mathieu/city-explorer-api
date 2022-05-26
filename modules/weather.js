@@ -3,10 +3,10 @@
 const axios = require('axios');
 let cache = require('./Cache.js');
 
-function getWeather(locationLat, locationLon) {
-  console.log(locationLat, locationLon);
-  const key = 'weather-' + locationLat + locationLon;
-  const url = `${process.env.WEATHER_URL}?lat=${locationLat}&lon=${locationLon}&key=${process.env.WEATHER_API_KEY}&days=3`;
+function getWeather(lat, lon) {
+  console.log(lat, lon);
+  const key = 'weather-' + lat + lon;
+  const url = `${process.env.WEATHER_URL}?lat=${lat}&lon=${lon}&key=${process.env.WEATHER_API_KEY}&days=3`;
 
   if (cache[key] && (Date.now() - cache[key].timestamp < 50000)) {
     console.log('Cache hit');
