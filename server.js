@@ -14,7 +14,17 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3002;
 
-app.get('/movie', getMovies);
+app.get('/movie', movieHandler);
+
+function movieHandler(request, response) {
+  const search = request.query.searchQuery;
+  getMovies(search)
+    .then(summaries => response.send(summaries))
+    .catch((error) => {
+      console.error(error);
+      response.status(200).send('Sorry. Something went wrong!');
+    });
+}
 app.get('/weather', weatherHandler);
 
 
