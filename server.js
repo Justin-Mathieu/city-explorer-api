@@ -16,6 +16,8 @@ const PORT = process.env.PORT || 3002;
 
 app.get('/movie', getMovies);
 app.get('/weather', weatherHandler);
+
+
 function weatherHandler(request, response) {
   const { lat, lon } = request.query;
   getWeather(lat, lon)

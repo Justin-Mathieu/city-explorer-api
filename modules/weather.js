@@ -4,6 +4,7 @@ const axios = require('axios');
 let cache = require('./Cache.js');
 
 function getWeather(locationLat, locationLon) {
+  console.log(locationLat, locationLon);
   const key = 'weather-' + locationLat + locationLon;
   const url = `${process.env.WEATHER_URL}?lat=${locationLat}&lon=${locationLon}&key=${process.env.WEATHER_API_KEY}&days=3`;
 
