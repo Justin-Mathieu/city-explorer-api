@@ -14,29 +14,8 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3002;
 
-app.get('/movie', movieHandler);
-
-function movieHandler(request, response) {
-  const search = request.query.searchQuery;
-  getMovies(search)
-    .then(summaries => response.send(summaries))
-    .catch((error) => {
-      console.error(error);
-      response.status(200).send('Sorry. Something went wrong!');
-    });
-}
-app.get('/weather', weatherHandler);
-
-
-function weatherHandler(request, response) {
-  const { lat, lon } = request.query;
-  getWeather(lat, lon)
-    .then(summaries => response.send(summaries))
-    .catch((error) => {
-      console.error(error);
-      response.status(200).send('Sorry. Something went wrong!');
-    });
-}
+app.get('/movie', getMovies);
+app.get('/weather', getWeather);
 app.use('*', notFound);
 
 app.get('/', (request, response) => {
